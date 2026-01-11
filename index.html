@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+
+        <form id="taskForm">
+            <input type="text" class="taskInput">
+            <button type="submit">เพิ่ม</button>
+        </form>
+
+        <ul id="taskList"></ul>
+
+        <p id="taskCount">คุณมี 0 Tasks</p>
+    </div>
+
+    <script>
+        let taskForm = document.getElementById("taskForm");
+        let taskInput = document.querySelector(".taskInput");
+        let taskList = document.getElementById("taskList");
+
+        let tasks = [];
+
+        taskForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let taskText = taskInput.value;
+
+            if (taskText === "") return;
+
+            tasks.push(taskText);
+            taskInput.value = "";
+
+            renderTasks();
+        });
+
+        function renderTasks() {
+            taskList.innerHTML = "";
+
+            tasks.forEach(function (task, index) {
+                let li = document.createElement("li");
+                li.textContent = task;
+
+                let deleteBth = document.createElement("button");
+                deleteBth.textContent = "ลบ";
+
+                let editBtn = document.createElement("button");
+                editBtn.textContent = "เเก้ไข";
+
+                editBtn.addEventListener("click", function () {
+                    let newText = prompt("เเก้ไข task", task);
+
+                    if (newText === null || newText === "") return;
+
+                    tasks[index] = newText;
+
+                    renderTasks();
+                })
+
+                deleteBth.addEventListener("click", function () {
+                    tasks.splice(index, 1)
+                    renderTasks();
+                });
+
+                li.appendChild(editBtn);
+                li.appendChild(deleteBth);
+                taskList.appendChild(li);
+
+            });
+            let taskCount = document.getElementById("taskCount")
+            taskCount.textContent = `คุณมี ${tasks.length} Tasks`;
+        }
+    </script>
+
+</body>
+
+</html>
